@@ -7,6 +7,8 @@
         public string LoginPassword { get; set; }
 
         public string ParameterCsvFileName => "Parameters.csv";
+        public string LocationCsvFileName => "Locations.csv";
+
         public string InputFolder => "Input";
     }
 }

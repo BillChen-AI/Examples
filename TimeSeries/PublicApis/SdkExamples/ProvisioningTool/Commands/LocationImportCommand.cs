@@ -3,10 +3,10 @@ using ProvisioningTool.Importers;
 
 namespace ProvisioningTool.Commands
 {
-    public class ParameterImportCommand : ProgramCommandBase
+    public class LocationImportCommand : ProgramCommandBase
     {
-        public ParameterImportCommand(Context context)
-            : base(CommandIds.ImportParameters, "Insert/Update parameters from the specified csv file.")
+        public LocationImportCommand(Context context) 
+            : base(CommandIds.ImportLocations, $"Get locations from csv file '{context.LocationCsvFileName}' and create/update them in AQTS.")
         {
             Context = context;
         }
@@ -16,14 +16,14 @@ namespace ProvisioningTool.Commands
             using (var client = Aquarius.TimeSeries.Client.AquariusClient.CreateConnectedClient(
                 Context.ServerHost, Context.LoginUserName, Context.LoginPassword))
             {
-                var importer = new ParameterImporter(client);
-                Log.Info($"{importer.ImportObjectName} import started.");
+                var importer = new LocationImporter(client);
 
-                var csvFilePath = Path.Combine(Context.InputFolder, Context.ParameterCsvFileName);
+                Log.Info($"{importer.ImportObjectName} import started.");
+                var csvFilePath = Path.Combine(Context.InputFolder, Context.LocationCsvFileName);
 
                 if (!File.Exists(csvFilePath))
                 {
-                    Log.Error($"{importer.ImportObjectName} csv file '{csvFilePath}' does not exist!");
+                    Log.Error($"Location csv file '{csvFilePath}' does not exist!");
                     return;
                 }
 
@@ -33,6 +33,7 @@ namespace ProvisioningTool.Commands
 
                 Log.Info($"Finished importing {importer.ImportObjectName}.");
             }
+
         }
     }
 }

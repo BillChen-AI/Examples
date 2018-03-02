@@ -18,7 +18,7 @@ namespace ProvisioningTool.Importers
         private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ImportResult<TSource, TTarget> ImportResult { get; }
-        protected abstract string ImportObjectName { get; }
+        public abstract string ImportObjectName { get; }
 
         protected readonly IAquariusClient ServiceClient;
 
@@ -33,8 +33,8 @@ namespace ProvisioningTool.Importers
 
         public virtual void ImportFromCsvFile(string filePath)
         {
-            var parser = new TParser();
-            var parsedItems = parser.ParseFromFile(filePath).ToList();
+            var parsedItems = ParseFile(filePath);
+
             ImportResult.ParsedItemTotal = parsedItems.Count;
 
             var existingItems = GetAllExistingItems().ToList();
@@ -52,10 +52,26 @@ namespace ProvisioningTool.Importers
             }
             finally
             {
-                _log.Info($"Total {ImportObjectName}s parsed: {ImportResult.ParsedItemTotal}. Inserted: {ImportResult.CreatedItems.Count}/{ImportResult.ItemsToCreate.Count}. " +
-                          $"Updated: {ImportResult.UpdatedItems.Count}/{ImportResult.ItemsToUpdate.Count}." +
-                          $"Create failed: {ImportResult.CreateFailedItems.Count}. Updated failed: {ImportResult.UpdateFailedItems.Count}");
+                _log.Info($"Total {ImportObjectName} parsed: {ImportResult.ParsedItemTotal}. Inserted: {ImportResult.CreatedItems.Count}/{ImportResult.ItemsToCreate.Count}. " +
+                          $"Updated: {ImportResult.UpdatedItems.Count}/{ImportResult.ItemsToUpdate.Count}. " +
+                          $"Create failed: {ImportResult.CreateFailedItems.Count}. Update failed: {ImportResult.UpdateFailedItems.Count}");
                 SaveFailedItems();
+            }
+        }
+
+        private List<TSource> ParseFile(string filePath)
+        {
+            try
+            {
+                return new TParser().ParseFromFile(filePath).ToList();
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = $"Error parsing file '{filePath}' for {ImportObjectName}.";
+
+                _log.Error(errorMessage, ex);
+
+                throw new ProvisioningToolException(errorMessage);
             }
         }
 
@@ -108,14 +124,14 @@ namespace ProvisioningTool.Importers
 
             if (ImportResult.CreateFailedItems.Any())
             {
-                var filePath = Path.Combine(outputFolder, $"CreateFailed{ImportObjectName}s_{timeStamp}.csv");
+                var filePath = Path.Combine(outputFolder, $"{ImportObjectName}CreateFailed_{timeStamp}.csv");
                 WriteItemsToFile(ImportResult.CreateFailedItems, filePath);
                 _log.Info($"{ImportResult.CreateFailedItems.Count} create failed items saved: {filePath}.");
             }
 
             if (ImportResult.UpdateFailedItems.Any())
             {
-                var filePath = Path.Combine(outputFolder, $"UpdateFailed{ImportObjectName}s_{timeStamp}.csv");
+                var filePath = Path.Combine(outputFolder, $"{ImportObjectName}UpdateFailed_{timeStamp}.csv");
                 WriteItemsToFile(ImportResult.UpdateFailedItems, filePath);
                 _log.Info($"{ImportResult.UpdateFailedItems.Count} update failed items saved: {filePath}.");
             }

@@ -14,6 +14,13 @@ namespace ProvisioningTool.Importers
         {
         }
 
+        public override string ImportObjectName => "Parameter";
+
+        protected override string GetId(ParsedParameter item)
+        {
+            return item.ParameterId;
+        }
+
         protected override IEnumerable<Parameter> GetAllExistingItems()
         {
             var response = ServiceClient.Provisioning.Get(new GetParameters());

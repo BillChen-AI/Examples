@@ -21,6 +21,7 @@ namespace ProvisioningTool
                 var runner = new ProgramRunner();
                 runner.AddCommand(new ParameterImportCommand(context));
                 runner.AddCommand(new LocationImportCommand(context));
+                runner.AddCommand(new TimeSeriesImportCommand(context));
                 runner.Run(args);
 
                 Environment.ExitCode = 0;

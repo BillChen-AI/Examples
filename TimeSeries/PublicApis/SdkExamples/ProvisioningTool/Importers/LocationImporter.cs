@@ -23,14 +23,24 @@ namespace ProvisioningTool.Importers
             return item.LocationIdentifier;
         }
 
-        protected override IEnumerable<Location> GetAllExistingItems()
+        private IEnumerable<Location> GetAllExistingItems()
         {
             var response = ServiceClient.Publish.Get(new LocationDescriptionListServiceRequest());
 
-            return response.LocationDescriptions.Select(_mapper.ToLocationDescription);
+            return response.LocationDescriptions.Select(_mapper.ToLocation);
         }
 
-        protected override bool AreSameItems(Location existing, ParsedLocation parsedItem)
+        protected override IEnumerable<UpdateItem<ParsedLocation>> GetItemsToUpdate(List<ParsedLocation> parsedItems)
+        {
+            var allExistingLocations = GetAllExistingItems();
+
+            return allExistingLocations
+                .Where(existing => parsedItems.Exists(parsedItem => AreSameItems(existing, parsedItem)))
+                .Select(existing => new UpdateItem<ParsedLocation>(existing.UniqueId,
+                            parsedItems.First(parsedItem => AreSameItems(existing, parsedItem))));
+        }
+
+        private bool AreSameItems(Location existing, ParsedLocation parsedItem)
         {
             return existing.Identifier == parsedItem.LocationIdentifier;
         }
@@ -42,11 +52,9 @@ namespace ProvisioningTool.Importers
             return ServiceClient.Provisioning.Post(postLocation);
         }
 
-        protected override Location Update(ParsedLocation parsedItem, List<Location> existingItems)
+        protected override Location Update(UpdateItem<ParsedLocation> itemToUpdate)
         {
-            var uniqueId = existingItems.Find(l => l.Identifier == parsedItem.LocationIdentifier).UniqueId;
-
-            var putLocation = _mapper.ToPutLocation(uniqueId, parsedItem);
+            var putLocation = _mapper.ToPutLocation(itemToUpdate.UniqueId, itemToUpdate.ParsedItem);
 
             return ServiceClient.Provisioning.Put(putLocation);
         }

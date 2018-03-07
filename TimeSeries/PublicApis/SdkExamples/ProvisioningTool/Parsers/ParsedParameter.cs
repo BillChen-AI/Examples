@@ -10,27 +10,32 @@ namespace ProvisioningTool.Parsers
     {
         [FieldOrder(1)]
         [FieldNotEmpty]
+        [FieldTrim(TrimMode.Both)]
         [FieldQuoted(QuoteMode.OptionalForBoth, MultilineMode.NotAllow)]
         public string ParameterId;
 
         [FieldOrder(2)]
         [FieldNotEmpty]
+        [FieldTrim(TrimMode.Both)]
         [FieldQuoted(QuoteMode.OptionalForBoth, MultilineMode.NotAllow)]
         public string Identifier;
 
         [FieldNotEmpty]
         [FieldOrder(3)]
+        [FieldTrim(TrimMode.Both)]
         [FieldQuoted(QuoteMode.OptionalForBoth, MultilineMode.NotAllow)]
         public string DisplayName;
 
         [FieldOrder(4)]
         [FieldNotEmpty]
+        [FieldTrim(TrimMode.Both)]
         [FieldQuoted(QuoteMode.OptionalForBoth, MultilineMode.NotAllow)]
         public string UnitGroupIdentifier;
 
         [FieldOrder(5)]
         [FieldNotEmpty]
         [FieldQuoted(QuoteMode.OptionalForBoth, MultilineMode.NotAllow)]
+        [FieldTrim(TrimMode.Both)]
         public string UnitIdentifier;
 
         [FieldOrder(6)]
@@ -47,7 +52,9 @@ namespace ProvisioningTool.Parsers
         public double? MaxValue;
 
         [FieldOrder(9)]
+        [FieldOptional]
         [FieldQuoted(QuoteMode.OptionalForBoth, MultilineMode.NotAllow)]
+        [FieldTrim(TrimMode.Both)]
         public string RoundingSpec;
     }
 }

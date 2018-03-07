@@ -1,3 +1,9 @@
-Identifier,Name,Path,Type,UtcOffset_Minutes,Description,Latitude,Longitude,Elevation,ElevationUnits
-6A4C,Huia Station,All Locations,Hydrology Station,12:00,Sample location description,-36.93891,174.64046,,
-6B5D1,925/1 Bore Upper Orewa Rd,All Locations,Hydrology Station,12:00,,-36.59414,174.652153,,
+Identifier,Name,Path,Type,UtcOffset,Description,Latitude,Longitude,Elevation,ElevationUnits
+783,Sleeping Woman,All Locations,Meteorology Station,-07:00,,,,,
+646,Moss Peak,All Locations,Meteorology Station,-07:00,,,,,
+667,North Fork Jocko,All Locations,Meteorology Station,-07:00,,,,,
+SIGM,"Saint Ignatius, Montana AgriMet Weather Station",All Locations,Meteorology Station,-07:00,,47.32527,-114.08416,,
+RDBM ,"Round Butte, Montana AgriMet Weather Station",All Locations,Meteorology Station,-07:00,,47.53944,-114.28055,,
+MJET,Jette Montana,All Locations,Meteorology Station,-07:00,,,,,
+MPIS,Pistol Creek Montana,All Locations,Meteorology Station,-07:00,,,,,
+MHOT,Hot Springs Montana,All Locations,Meteorology Station,-07:00,,,,,

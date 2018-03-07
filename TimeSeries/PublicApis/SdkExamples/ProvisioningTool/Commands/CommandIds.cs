@@ -4,5 +4,6 @@
     {
         public const string ImportParameters = "ImportParameters";
         public static string ImportLocations => "ImportLocations";
+        public static string ImportTimeSeries => "ImportTimeSeries";
     }
 }

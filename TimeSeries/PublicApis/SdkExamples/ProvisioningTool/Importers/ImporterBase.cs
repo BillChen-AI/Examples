@@ -37,18 +37,18 @@ namespace ProvisioningTool.Importers
 
             ImportResult.ParsedItemTotal = parsedItems.Count;
 
-            var existingItems = GetAllExistingItems().ToList();
-            var itemsToUpdate = parsedItems.Where(entry => existingItems.Any(existing => AreSameItems(existing, entry)))
-                .ToList();
-            var itemsToCreate = parsedItems.Except(itemsToUpdate).ToList();
+            var itemsToUpdate = GetItemsToUpdate(parsedItems).ToList();
+            var parsedItemsToUpdate = itemsToUpdate.Select(item => item.ParsedItem).ToList();
+
+            var itemsToCreate = parsedItems.Except(parsedItemsToUpdate).ToList();
 
             ImportResult.ItemsToCreate.AddRange(itemsToCreate);
-            ImportResult.ItemsToUpdate.AddRange(itemsToUpdate);
+            ImportResult.ItemsToUpdate.AddRange(parsedItemsToUpdate);
 
             try
             {
                 CreateMany(itemsToCreate);
-                UpdateMany(itemsToUpdate, existingItems);
+                UpdateMany(itemsToUpdate);
             }
             finally
             {
@@ -75,29 +75,28 @@ namespace ProvisioningTool.Importers
             }
         }
 
-        private void UpdateMany(List<TSource> itemsToUpdate, List<TTarget> existingItems)
+        private void UpdateMany(IEnumerable<UpdateItem<TSource>> itemsToUpdate)
         {
             foreach (var itemToUpdate in itemsToUpdate)
             {
                 try
                 {
-                    var updatedItem = Update(itemToUpdate, existingItems);
+                    var updatedItem = Update(itemToUpdate);
 
                     ImportResult.UpdatedItems.Add(updatedItem);
                 }
                 catch (WebServiceException ex)
                 {
-                    _log.Error($"Failed to update {ImportObjectName} with id '{GetId(itemToUpdate)}'.", ex);
-                    ImportResult.UpdateFailedItems.Add(itemToUpdate);
+                    _log.Error($"Failed to update {ImportObjectName} with id '{GetId(itemToUpdate.ParsedItem)}'.", ex);
+                    ImportResult.UpdateFailedItems.Add(itemToUpdate.ParsedItem);
                 }
             }
         }
 
-        protected abstract IEnumerable<TTarget> GetAllExistingItems();
-        protected abstract bool AreSameItems(TTarget existing, TSource parsedItem);
+        protected abstract IEnumerable<UpdateItem<TSource>> GetItemsToUpdate(List<TSource> parsedItems);
 
         protected abstract TTarget Create(TSource itemToCreate);
-        protected abstract TTarget Update(TSource itemToUpdate, List<TTarget> existingItems);
+        protected abstract TTarget Update(UpdateItem<TSource> itemToUpdate);
 
         private void CreateMany(IEnumerable<TSource> itemsToCreate)
         {

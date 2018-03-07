@@ -83,25 +83,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CommandIds.cs" />
+    <Compile Include="Commands\TimeSeriesImportCommand.cs" />
     <Compile Include="Commands\ParameterImportCommand.cs" />
     <Compile Include="Commands\IProgramCommand.cs" />
     <Compile Include="Commands\ProgramCommandBase.cs" />
     <Compile Include="Commands\ProgramRunner.cs" />
     <Compile Include="Commands\LocationImportCommand.cs" />
     <Compile Include="Context.cs" />
+    <Compile Include="Importers\UpdateItem.cs" />
     <Compile Include="Importers\ImporterBase.cs" />
     <Compile Include="Importers\ImportResult.cs" />
+    <Compile Include="Importers\TimeSeriesImporter.cs" />
     <Compile Include="Importers\LocationImporter.cs" />
     <Compile Include="Importers\ParameterImporter.cs" />
+    <Compile Include="Mappers\TimeSeriesMapper.cs" />
     <Compile Include="Mappers\LocationMapper.cs" />
     <Compile Include="Mappers\MapperBase.cs" />
     <Compile Include="Mappers\ParameterMapper.cs" />
+    <Compile Include="Parsers\TimeSeriesCsvFileParser.cs" />
     <Compile Include="Parsers\ParsedLocation.cs" />
     <Compile Include="Parsers\CsvFileParserBase.cs" />
     <Compile Include="Parsers\IParser.cs" />
     <Compile Include="Parsers\LocationCsvFileParser.cs" />
     <Compile Include="Parsers\ParameterCsvFileParser.cs" />
     <Compile Include="Parsers\ParsedParameter.cs" />
+    <Compile Include="Parsers\ParsedTimeSeries.cs" />
+    <Compile Include="Parsers\TimeSeriesType.cs" />
     <Compile Include="Parsers\TimeSpanConverter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -115,7 +122,16 @@
     <None Include="SampleFiles\SampleLocations.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="SampleFiles\SampleLocations.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="SampleFiles\SampleParameters.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SampleFiles\SampleTimeSeries.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SampleFiles\SampleTimeSeries.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

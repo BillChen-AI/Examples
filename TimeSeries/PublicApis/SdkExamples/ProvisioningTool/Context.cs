@@ -8,6 +8,7 @@
 
         public string ParameterCsvFileName => "Parameters.csv";
         public string LocationCsvFileName => "Locations.csv";
+        public string TimeSeriesCsvFileName => "TimeSeries.csv";
 
         public string InputFolder => "Input";
     }

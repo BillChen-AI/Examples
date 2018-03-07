@@ -36,7 +36,7 @@ namespace ProvisioningTool.Mappers
                 : Offset.Zero;
         }
 
-        public Location ToLocationDescription(LocationDescription locationDescription)
+        public Location ToLocation(LocationDescription locationDescription)
         {
             return Mapper.Map<Location>(locationDescription);
         }
